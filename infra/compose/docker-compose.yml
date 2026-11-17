@@ -1,0 +1,59 @@
+# Lingkungan pengembangan lokal (rancangan teknis §15).
+# Sediakan: signaling, PostgreSQL (persisten), Redis (presence/cache),
+# Coturn (STUN/TURN), Prometheus (monitoring).
+# Jalankan dari root repo:
+#   docker compose -f infra/compose/docker-compose.yml up --build
+services:
+  signaling:
+    build:
+      context: ../..
+      dockerfile: infra/docker/signaling.Dockerfile
+    environment:
+      BIND: "0.0.0.0:8080"
+      LOG_JSON: "1"
+      RUST_LOG: "info"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: jenderalremote
+      POSTGRES_PASSWORD: dev_only_change_me
+      POSTGRES_DB: jenderalremote
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+
+  coturn:
+    image: coturn/coturn:alpine
+    network_mode: host # TURN butuh rentang port relay di host
+    volumes:
+      - ../coturn/turnserver.conf:/etc/coturn/turnserver.conf:ro
+    # Untuk pengujian LAN, kredensial statis dev ada di turnserver.conf.
+    # Produksi: pakai auth rest API + TLS (lihat docs/operations.md).
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+volumes:
+  pgdata:

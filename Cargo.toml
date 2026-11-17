@@ -1,0 +1,61 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/remote-protocol",
+    "crates/remote-core",
+    "crates/remote-security",
+    "crates/remote-telemetry",
+    "crates/remote-capture",
+    "crates/remote-input",
+    "crates/remote-webrtc",
+    "services/signaling",
+    "apps/desktop/src-tauri",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/mohammadirham37/jenderalremote_desktop"
+authors = ["Mohammad Irham <mohammadirham37@users.noreply.github.com>"]
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+futures-util = "0.3"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Errors & utilities
+thiserror = "2"
+anyhow = "1"
+rand = "0.8"
+uuid = { version = "1", features = ["v4"] }
+base64 = "0.22"
+sha2 = "0.10"
+hex = "0.4"
+
+# Crypto / identity
+ed25519-dalek = { version = "2", default-features = false, features = ["std"] }
+keyring = { version = "3", features = ["apple-native", "windows-native", "sync-secret-service"] }
+
+# Observability
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json", "fmt"] }
+
+# Internal crates
+remote-protocol = { path = "crates/remote-protocol" }
+remote-core = { path = "crates/remote-core" }
+remote-security = { path = "crates/remote-security" }
+remote-telemetry = { path = "crates/remote-telemetry" }
+remote-capture = { path = "crates/remote-capture" }
+remote-input = { path = "crates/remote-input" }
+remote-webrtc = { path = "crates/remote-webrtc" }
+
+[profile.release]
+lto = "thin"
+strip = true
+codegen-units = 1

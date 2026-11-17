@@ -1,0 +1,21 @@
+[package]
+name = "remote-security"
+description = "Device identity, OS-vault secret storage, session tokens, access policy, and audit events"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+remote-protocol.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+rand.workspace = true
+base64.workspace = true
+sha2.workspace = true
+hex.workspace = true
+ed25519-dalek.workspace = true
+keyring.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

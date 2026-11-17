@@ -1,0 +1,39 @@
+[package]
+name = "jenderalremote-signaling"
+description = "Signaling and control-plane server (Axum + WebSocket Secure)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "jenderalremote-signaling"
+path = "src/main.rs"
+
+[lib]
+name = "jenderalremote_signaling"
+path = "src/lib.rs"
+
+[dependencies]
+remote-protocol.workspace = true
+remote-security.workspace = true
+remote-telemetry.workspace = true
+
+tokio.workspace = true
+axum = { version = "0.8", features = ["ws"] }
+tower-http = { version = "0.6", features = ["trace"] }
+serde.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+rand.workspace = true
+sha2.workspace = true
+base64.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+futures-util.workspace = true
+
+[dev-dependencies]
+remote-webrtc.workspace = true
+remote-capture.workspace = true
+remote-input.workspace = true
+remote-core.workspace = true

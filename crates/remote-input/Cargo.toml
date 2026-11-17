@@ -1,0 +1,27 @@
+[package]
+name = "remote-input"
+description = "Input control interface (mouse/keyboard) with a no-op stub and an optional native backend (enigo)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+remote-protocol.workspace = true
+async-trait.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+
+[features]
+default = []
+# Native input injection via `enigo`:
+# - macOS: CoreGraphics CGEvent (requires Accessibility permission)
+# - Windows: SendInput
+# - Linux: X11 XTest (requires libX11/libXtst)
+# See docs/adr/0002.
+enigo = ["dep:enigo"]
+
+[dependencies.enigo]
+version = "0.2"
+optional = true

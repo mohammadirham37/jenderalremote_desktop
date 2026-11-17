@@ -1,0 +1,12 @@
+[package]
+name = "remote-telemetry"
+description = "Structured logging setup and session metrics for the remote engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

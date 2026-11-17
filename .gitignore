@@ -1,0 +1,30 @@
+# Rust
+/target
+**/target
+Cargo.lock.orig
+
+# Node
+node_modules/
+dist/
+*.local
+
+# Environment & secrets
+.env
+.env.*
+*.pem
+*.key
+secretstore/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Tauri build output (gen/schemas dikomit untuk review ACL; android/apple diabaikan)
+apps/desktop/src-tauri/gen/android/
+apps/desktop/src-tauri/gen/apple/
+apps/desktop/src-tauri/target/

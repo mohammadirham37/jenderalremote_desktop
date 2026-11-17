@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Kemampuan minimal untuk jendela utama: event core + plugin opener. Tidak ada akses fs/shell langsung (rancangan teknis §4.4).",
+  "windows": ["main"],
+  "permissions": ["core:default", "opener:default"]
+}

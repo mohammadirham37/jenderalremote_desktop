@@ -1,0 +1,23 @@
+[package]
+name = "remote-capture"
+description = "Screen capture interface with a deterministic stub backend and an optional native backend (xcap)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+
+[features]
+default = []
+# Cross-platform native capture on top of OS APIs (WinRT / CoreGraphics / X11)
+# via the `xcap` crate. Used by the desktop app; see docs/adr/0002.
+xcap = ["dep:xcap"]
+
+[dependencies.xcap]
+version = "0.4"
+optional = true
