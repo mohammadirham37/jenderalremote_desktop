@@ -20,6 +20,9 @@ const KIND_PERMISSION: u8 = 2;
 const KIND_INVALID_STATE: u8 = 3;
 
 type ThreadError = (u8, String);
+/// Raw frame payload straight from the capture thread: `(width, height, rgba)`.
+type FramePayload = (u32, u32, Vec<u8>);
+type Reply<T> = std_mpsc::Sender<Result<T, ThreadError>>;
 
 fn thread_error(kind: u8, message: impl Into<String>) -> ThreadError {
     (kind, message.into())
@@ -38,9 +41,9 @@ fn map_thread_error((kind, message): ThreadError) -> CaptureError {
 }
 
 enum Cmd {
-    Start(CaptureConfig, std_mpsc::Sender<Result<(), ThreadError>>),
-    Frame(std_mpsc::Sender<Result<(u32, u32, Vec<u8>), ThreadError>>),
-    Stop(std_mpsc::Sender<Result<(), ThreadError>>),
+    Start(CaptureConfig, Reply<()>),
+    Frame(Reply<FramePayload>),
+    Stop(Reply<()>),
 }
 
 pub struct XcapCapture {
@@ -138,7 +141,7 @@ fn select_monitor(index: usize) -> Result<xcap::Monitor, ThreadError> {
     Ok(monitors.swap_remove(0))
 }
 
-fn capture_frame(monitor: Option<&xcap::Monitor>) -> Result<(u32, u32, Vec<u8>), ThreadError> {
+fn capture_frame(monitor: Option<&xcap::Monitor>) -> Result<FramePayload, ThreadError> {
     let Some(monitor) = monitor else {
         return Err(thread_error(KIND_INVALID_STATE, "capture not started"));
     };
